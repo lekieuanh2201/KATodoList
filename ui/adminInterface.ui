@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>adminInterface</class>
+ <widget class="QDialog" name="adminInterface">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>805</width>
+    <height>590</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>KATotoList</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>img/AppIcon.png</normaloff>img/AppIcon.png</iconset>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(255, 255, 255);</string>
+  </property>
+  <widget class="QPushButton" name="btndeleteUser">
+   <property name="geometry">
+    <rect>
+     <x>690</x>
+     <y>500</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(210, 212, 255);
+font: 63 9pt &quot;Yu Gothic UI Semibold&quot;;</string>
+   </property>
+   <property name="text">
+    <string>Delete User</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btnsignOutAdmin">
+   <property name="geometry">
+    <rect>
+     <x>700</x>
+     <y>10</y>
+     <width>75</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">
+background-color: rgb(210, 212, 255);
+font: 63 9pt &quot;Yu Gothic UI Semibold&quot;;</string>
+   </property>
+   <property name="text">
+    <string>Sign out</string>
+   </property>
+  </widget>
+  <widget class="QTableWidget" name="listOfUser">
+   <property name="geometry">
+    <rect>
+     <x>50</x>
+     <y>131</y>
+     <width>720</width>
+     <height>340</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">
+background-color: rgb(255, 255, 255);</string>
+   </property>
+   <column>
+    <property name="text">
+     <string>Username</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Password</string>
+    </property>
+   </column>
+  </widget>
+  <widget class="QPushButton" name="btnaddUser">
+   <property name="geometry">
+    <rect>
+     <x>450</x>
+     <y>500</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(210, 212, 255);
+font: 63 9pt &quot;Yu Gothic UI Semibold&quot;;</string>
+   </property>
+   <property name="text">
+    <string>Add User</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btneditUser">
+   <property name="geometry">
+    <rect>
+     <x>570</x>
+     <y>500</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(210, 212, 255);
+font: 63 9pt &quot;Yu Gothic UI Semibold&quot;;</string>
+   </property>
+   <property name="text">
+    <string>Edit User</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="toDoList">
+   <property name="geometry">
+    <rect>
+     <x>310</x>
+     <y>20</y>
+     <width>201</width>
+     <height>71</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Yu Gothic UI Semibold</family>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:36pt;&quot;&gt;Todo list&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
