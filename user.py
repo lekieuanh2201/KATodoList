@@ -13,8 +13,7 @@ class User(QDialog):
         self.listOfTask.setColumnWidth(3, 90)
         self.btnAddTask.clicked.connect(self.addTask)
         self.btnDeleteTask.clicked.connect(self.deleteTask)
-        self.btnSignOut_user.clicked.connect(self.gotoLogin)
-
+        
     def addTask(self):
         self.listOfTask.insertRow(self.listOfTask.rowCount())
         for row in range(self.listOfTask.rowCount()):
@@ -28,13 +27,13 @@ class User(QDialog):
             currentRow = self.listOfTask.currentRow()
             self.listOfTask.removeRow(currentRow)
 
-    def gotoLogin(self):
-        widget.setCurrentIndex(widget.currentIndex()+1)
         
-        
+#test interface display
 app = QApplication(sys.argv)
 user = User()
 widget = QtWidgets.QStackedWidget()
+widget.setWindowTitle('KATodoList')
+widget.setWindowIcon(QtGui.QIcon('img/AppIcon.png'))
 widget.addWidget(user)
 widget.setFixedHeight(590)
 widget.setFixedWidth(805)
