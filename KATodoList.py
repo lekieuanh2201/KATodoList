@@ -36,7 +36,7 @@ widget.addWidget(user)
 
 #admin interface
 admin = Admin()
-widger.addWidget(admin)
+widget.addWidget(admin)
 
 #main
 app = QApplication(sys.argv)
