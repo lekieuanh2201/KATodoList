@@ -48,12 +48,17 @@ background-color: rgb(255, 255, 255);</string>
    </column>
    <column>
     <property name="text">
-     <string>Deadline</string>
+     <string>Start</string>
     </property>
    </column>
    <column>
     <property name="text">
-     <string/>
+     <string>End</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Check</string>
     </property>
    </column>
   </widget>
@@ -144,6 +149,23 @@ font: 63 9pt &quot;Yu Gothic UI Semibold&quot;;</string>
    </property>
    <property name="text">
     <string>Delete Task</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton">
+   <property name="geometry">
+    <rect>
+     <x>330</x>
+     <y>500</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(210, 212, 255);
+font: 63 9pt &quot;Yu Gothic UI Semibold&quot;;</string>
+   </property>
+   <property name="text">
+    <string>Save all</string>
    </property>
   </widget>
  </widget>

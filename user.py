@@ -1,7 +1,7 @@
 import sys
 from PyQt5.uic import loadUi
 from PyQt5 import QtCore, QtWidgets, QtGui
-from PyQt5.QtWidgets import QDialog, QApplication
+from PyQt5.QtWidgets import QDateTimeEdit, QDialog, QApplication
 
 class User(QDialog):
     def __init__(self):
@@ -20,8 +20,18 @@ class User(QDialog):
             chkBoxItem = QtWidgets.QTableWidgetItem("Done")
             chkBoxItem.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
             chkBoxItem.setCheckState(QtCore.Qt.Unchecked)
-            self.listOfTask.setItem(row, 3, chkBoxItem)
+            self.listOfTask.setItem(row, 4, chkBoxItem)
+
+            dateTimeStart= QDateTimeEdit()
+            dateTimeStart.setFrame(False)
+            self.listOfTask.setCellWidget(row, 3, dateTimeStart)
+
+            dateTimeEnd = QDateTimeEdit()
+            dateTimeEnd.setFrame(False)
+            self.listOfTask.setCellWidget(row, 2, dateTimeEnd)
             
+            
+
     def deleteTask(self):
         if self.listOfTask.rowCount()>0:
             currentRow = self.listOfTask.currentRow()
