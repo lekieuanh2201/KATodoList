@@ -7,6 +7,14 @@ class SignIn(QDialog):
     def __init__(self):
         super(SignIn, self).__init__()
         loadUi("ui/signIn.ui", self)
+        self.btnSignUp_In.setStyleSheet("QPushButton""{""border-radius: 10px; border: 1px solid rgb(0, 85, 127);""}"
+                                        "QPushButton::hover""{" "font-weight:bold; ""}"
+                                        "QPushButton::pressed" "{" "background-color: #CCE5FF; ""}" )
+        self.btnSignUp_In.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.btnSignIn_In.setStyleSheet("QPushButton""{""color: #fff; background-color: rgb(0, 85, 127);border-radius: 10px; border: 1px solid rgb(0, 85, 127);""}"
+                                        "QPushButton::hover""{" "font-weight:bold; ""}"
+                                        "QPushButton::pressed" "{" "background-color: #fff; color: rgb(0, 85, 127)""}" )
+        self.btnSignIn_In.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.passwordFillIn.setEchoMode(QtWidgets.QLineEdit.Password)
         self.btnSignUp_In.clicked.connect(self.gotoSignUp)
         self.btnSignIn_In.clicked.connect(self.login)
@@ -19,9 +27,12 @@ class SignIn(QDialog):
     def login(self):
         username = self.useNameFill.text()
         password = self.passwordFillIn.text()
+
         if username == "admin":
             if password == "admin123":
-                widget.setCurrentIndex(3)
+                admin = Admin()
+                widget.addWidget(admin)
+                widget.setCurrentIndex(widget.currentIndex()+1)
             else:
                 msg = QtWidgets.QMessageBox()
                 msg.setIcon(QtWidgets.QMessageBox.Warning)
@@ -39,7 +50,7 @@ class SignIn(QDialog):
                                 user = User()
                                 user.setTable(row[0])
                                 widget.addWidget(user)
-                                widget.setCurrentIndex(widget.currentIndex()+1)
+                                widget.setCurrentIndex(widget.currentIndex()+3)
                                 break
                             else:
                                 msg = QtWidgets.QMessageBox()
@@ -63,11 +74,20 @@ class SignIn(QDialog):
                         msg.setWindowIcon(QtGui.QIcon('img/AppIcon.png'))
                         msg.exec_()
                         break
+        
                                     
 class SignUp(QDialog):
     def __init__(self):
         super(SignUp, self).__init__()
         loadUi("ui/signUp.ui", self)
+        self.btnSignIn_Up.setStyleSheet("QPushButton""{""border-radius: 10px; border: 1px solid rgb(0, 85, 127);""}"
+                                        "QPushButton::hover""{" "font-weight:bold; ""}"
+                                        "QPushButton::pressed" "{" "background-color: #CCE5FF; ""}" )
+        self.btnSignIn_Up.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.btnSignUp_Up.setStyleSheet("QPushButton""{""color: #fff; background-color: rgb(0, 85, 127);border-radius: 10px; border: 1px solid rgb(0, 85, 127);""}"
+                                        "QPushButton::hover""{" "font-weight:bold; ""}"
+                                        "QPushButton::pressed" "{" "background-color: #fff; color: rgb(0, 85, 127)""}" )
+        self.btnSignUp_Up.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.passwordFillUp.setEchoMode(QtWidgets.QLineEdit.Password)
         self.verifyPassword.setEchoMode(QtWidgets.QLineEdit.Password)
         self.btnSignIn_Up.clicked.connect(self.gotoSignIn)
@@ -87,6 +107,32 @@ class User(QDialog):
     def __init__(self):
         super(User, self).__init__()
         loadUi("ui/userInterface.ui", self)
+
+        self.btnSignOut_user.setStyleSheet("QPushButton""{""color: #fff; background-color: rgb(0, 85, 127);border-radius: 10px; border: 1px solid rgb(0, 85, 127);""}"
+                                        "QPushButton::hover""{" "font-weight:bold; ""}"
+                                        "QPushButton::pressed" "{" "background-color: #fff; color: rgb(0, 85, 127)""}" )
+        self.btnSignOut_user.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        
+        self.btnSaveAll.setStyleSheet("QPushButton""{""border-radius: 10px; border: 1px solid rgb(0, 85, 127);""}"
+                                        "QPushButton::hover""{" "font-weight:bold; ""}"
+                                        "QPushButton::pressed" "{" "background-color: #CCE5FF; ""}" )
+        self.btnSaveAll.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        
+        self.btnAddTask.setStyleSheet("QPushButton""{""border-radius: 10px; border: 1px solid rgb(0, 85, 127);""}"
+                                        "QPushButton::hover""{" "font-weight:bold; ""}"
+                                        "QPushButton::pressed" "{" "background-color: #CCE5FF; ""}" )
+        self.btnAddTask.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        
+        self.btnEditTask.setStyleSheet("QPushButton""{""border-radius: 10px; border: 1px solid rgb(0, 85, 127);""}"
+                                        "QPushButton::hover""{" "font-weight:bold; ""}"
+                                        "QPushButton::pressed" "{" "background-color: #CCE5FF; ""}" )
+        self.btnEditTask.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        
+        self.btnDeleteTask.setStyleSheet("QPushButton""{""border-radius: 10px; border: 1px solid rgb(0, 85, 127);""}"
+                                        "QPushButton::hover""{" "font-weight:bold; ""}"
+                                        "QPushButton::pressed" "{" "background-color: #CCE5FF; ""}" )
+        self.btnDeleteTask.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+
         self.listOfTask.setColumnWidth(0, 300)
         self.listOfTask.setColumnWidth(1, 190)
         self.listOfTask.setColumnWidth(2, 120)
@@ -124,6 +170,26 @@ class Admin(QDialog):
     def __init__(self):
         super(Admin, self).__init__()
         loadUi("ui/adminInterface.ui", self)
+        self.btnsignOutAdmin.setStyleSheet("QPushButton""{""color: #fff; background-color: rgb(0, 85, 127);border-radius: 10px; border: 1px solid rgb(0, 85, 127);""}"
+                                        "QPushButton::hover""{" "font-weight:bold; ""}"
+                                        "QPushButton::pressed" "{" "background-color: #fff; color: rgb(0, 85, 127)""}" )
+        self.btnsignOutAdmin.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+
+        self.btnaddUser.setStyleSheet("QPushButton""{""border-radius: 10px; border: 1px solid rgb(0, 85, 127);""}"
+                                        "QPushButton::hover""{" "font-weight:bold; ""}"
+                                        "QPushButton::pressed" "{" "background-color: #CCE5FF; ""}" )
+        self.btnaddUser.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        
+        self.btneditUser.setStyleSheet("QPushButton""{""border-radius: 10px; border: 1px solid rgb(0, 85, 127);""}"
+                                        "QPushButton::hover""{" "font-weight:bold; ""}"
+                                        "QPushButton::pressed" "{" "background-color: #CCE5FF; ""}" )
+        self.btneditUser.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        
+        self.btndeleteUser.setStyleSheet("QPushButton""{""border-radius: 10px; border: 1px solid rgb(0, 85, 127);""}"
+                                        "QPushButton::hover""{" "font-weight:bold; ""}"
+                                        "QPushButton::pressed" "{" "background-color: #CCE5FF; ""}" )
+        self.btndeleteUser.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+
         self.listOfUser.setColumnWidth(0, 400)
         self.listOfUser.setColumnWidth(1, 300)
         self.btnaddUser.clicked.connect(self.addUser)
@@ -139,6 +205,7 @@ class Admin(QDialog):
             self.listOfUser.removeRow(currentRow)
     def logout(self):
         widget.setCurrentIndex(0)
+        
 
 #main
 app = QApplication(sys.argv)
@@ -147,7 +214,7 @@ widget = QtWidgets.QStackedWidget()
 widget.setWindowTitle('KATodoList')
 widget.setWindowIcon(QtGui.QIcon('img/AppIcon.png'))
 widget.addWidget(signIn)
-widget.setFixedHeight(590)
-widget.setFixedWidth(805)
+widget.setFixedHeight(920)
+widget.setFixedWidth(1620)
 widget.show()
 sys.exit(app.exec_())

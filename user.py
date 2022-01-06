@@ -7,6 +7,31 @@ class User(QDialog):
     def __init__(self):
         super(User, self).__init__()
         loadUi("ui/userInterface.ui", self)
+        self.btnSignOut_user.setStyleSheet("QPushButton""{""color: #fff; background-color: rgb(0, 85, 127);border-radius: 10px; border: 1px solid rgb(0, 85, 127);""}"
+                                        "QPushButton::hover""{" "font-weight:bold; ""}"
+                                        "QPushButton::pressed" "{" "background-color: #fff; color: rgb(0, 85, 127)""}" )
+        self.btnSignOut_user.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        
+        self.btnSaveAll.setStyleSheet("QPushButton""{""border-radius: 10px; border: 1px solid rgb(0, 85, 127);""}"
+                                        "QPushButton::hover""{" "font-weight:bold; ""}"
+                                        "QPushButton::pressed" "{" "background-color: #CCE5FF; ""}" )
+        self.btnSaveAll.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        
+        self.btnAddTask.setStyleSheet("QPushButton""{""border-radius: 10px; border: 1px solid rgb(0, 85, 127);""}"
+                                        "QPushButton::hover""{" "font-weight:bold; ""}"
+                                        "QPushButton::pressed" "{" "background-color: #CCE5FF; ""}" )
+        self.btnAddTask.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        
+        self.btnEditTask.setStyleSheet("QPushButton""{""border-radius: 10px; border: 1px solid rgb(0, 85, 127);""}"
+                                        "QPushButton::hover""{" "font-weight:bold; ""}"
+                                        "QPushButton::pressed" "{" "background-color: #CCE5FF; ""}" )
+        self.btnEditTask.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        
+        self.btnDeleteTask.setStyleSheet("QPushButton""{""border-radius: 10px; border: 1px solid rgb(0, 85, 127);""}"
+                                        "QPushButton::hover""{" "font-weight:bold; ""}"
+                                        "QPushButton::pressed" "{" "background-color: #CCE5FF; ""}" )
+        self.btnDeleteTask.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+
         self.listOfTask.setColumnWidth(0, 300)
         self.listOfTask.setColumnWidth(1, 190)
         self.listOfTask.setColumnWidth(2, 120)
@@ -45,7 +70,7 @@ widget = QtWidgets.QStackedWidget()
 widget.setWindowTitle('KATodoList')
 widget.setWindowIcon(QtGui.QIcon('img/AppIcon.png'))
 widget.addWidget(user)
-widget.setFixedHeight(590)
-widget.setFixedWidth(805)
+widget.setFixedHeight(920)
+widget.setFixedWidth(1620)
 widget.show()
 sys.exit(app.exec_())

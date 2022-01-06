@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>805</width>
-    <height>590</height>
+    <width>1620</width>
+    <height>920</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -23,10 +23,10 @@
   <widget class="QTableWidget" name="listOfTask">
    <property name="geometry">
     <rect>
-     <x>50</x>
-     <y>131</y>
-     <width>720</width>
-     <height>340</height>
+     <x>100</x>
+     <y>200</y>
+     <width>1420</width>
+     <height>580</height>
     </rect>
    </property>
    <property name="mouseTracking">
@@ -65,10 +65,10 @@ background-color: rgb(255, 255, 255);</string>
   <widget class="QPushButton" name="btnSignOut_user">
    <property name="geometry">
     <rect>
-     <x>700</x>
-     <y>10</y>
-     <width>75</width>
-     <height>31</height>
+     <x>1420</x>
+     <y>20</y>
+     <width>100</width>
+     <height>40</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -83,10 +83,10 @@ font: 63 9pt &quot;Yu Gothic UI Semibold&quot;;</string>
   <widget class="QPushButton" name="btnEditTask">
    <property name="geometry">
     <rect>
-     <x>570</x>
-     <y>500</y>
-     <width>75</width>
-     <height>23</height>
+     <x>1250</x>
+     <y>800</y>
+     <width>120</width>
+     <height>40</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -100,10 +100,10 @@ font: 63 9pt &quot;Yu Gothic UI Semibold&quot;;</string>
   <widget class="QLabel" name="toDoList">
    <property name="geometry">
     <rect>
-     <x>310</x>
-     <y>20</y>
-     <width>201</width>
-     <height>71</height>
+     <x>670</x>
+     <y>50</y>
+     <width>300</width>
+     <height>100</height>
     </rect>
    </property>
    <property name="font">
@@ -120,10 +120,10 @@ font: 63 9pt &quot;Yu Gothic UI Semibold&quot;;</string>
   <widget class="QPushButton" name="btnAddTask">
    <property name="geometry">
     <rect>
-     <x>450</x>
-     <y>500</y>
-     <width>75</width>
-     <height>23</height>
+     <x>1100</x>
+     <y>800</y>
+     <width>120</width>
+     <height>40</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -137,10 +137,10 @@ font: 63 9pt &quot;Yu Gothic UI Semibold&quot;;</string>
   <widget class="QPushButton" name="btnDeleteTask">
    <property name="geometry">
     <rect>
-     <x>690</x>
-     <y>500</y>
-     <width>75</width>
-     <height>23</height>
+     <x>1400</x>
+     <y>800</y>
+     <width>120</width>
+     <height>40</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -151,13 +151,13 @@ font: 63 9pt &quot;Yu Gothic UI Semibold&quot;;</string>
     <string>Delete Task</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="btnSaveAll">
    <property name="geometry">
     <rect>
-     <x>330</x>
-     <y>500</y>
-     <width>75</width>
-     <height>23</height>
+     <x>960</x>
+     <y>800</y>
+     <width>120</width>
+     <height>40</height>
     </rect>
    </property>
    <property name="styleSheet">
