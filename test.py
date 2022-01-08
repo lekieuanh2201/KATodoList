@@ -24,6 +24,7 @@ class SignIn(QDialog):
         widget.addWidget(signup)
         widget.setCurrentIndex(widget.currentIndex()+1)
 
+
     def login(self):
         username = self.useNameFill.text()
         password = self.passwordFillIn.text()
