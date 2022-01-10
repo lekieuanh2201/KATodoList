@@ -1,8 +1,9 @@
+import datetime
 import os
 import sys, pickle
 from PyQt5.uic import loadUi
 from PyQt5 import QtWidgets, QtGui, QtCore
-from PyQt5.QtWidgets import QDialog, QApplication, QMainWindow
+from PyQt5.QtWidgets import QDateTimeEdit, QDialog, QApplication, QMainWindow
 
 class SignIn(QDialog):
     def __init__(self):
@@ -33,7 +34,6 @@ class SignIn(QDialog):
         if username == "admin":
             if password == "admin123":
                 admin = Admin()
-                # admin.setUpTable()
                 widget.addWidget(admin)
                 widget.setCurrentWidget(admin)
             else:
@@ -44,29 +44,39 @@ class SignIn(QDialog):
                 msg.setWindowIcon(QtGui.QIcon('img/AppIcon.png'))
                 msg.exec_()
         else:
-            with open ('data/user.dat', 'rb') as userdata:
-                for line in userdata:  
-                    if username in line[0]:
-                        if line[1] == password:
-                            user = User()
-                            # user.setTable(line[0])
-                            widget.addWidget(user)
-                            widget.setCurrentIndex(widget.currentIndex()+3)
-                            break
-                        else:
-                            msg = QtWidgets.QMessageBox()
-                            msg.setIcon(QtWidgets.QMessageBox.Warning)
-                            msg.setText("Incorrect password!")
-                            msg.setWindowTitle("Warning")
-                            msg.setWindowIcon(QtGui.QIcon('img/AppIcon.png'))
-                            msg.exec_()
-                    else:
+            if os.path.getsize('data/user.dat') == 0:
+                msg = QtWidgets.QMessageBox()
+                msg.setIcon(QtWidgets.QMessageBox.Warning)
+                msg.setText("Invalid account!")
+                msg.setWindowTitle("Warning")
+                msg.setWindowIcon(QtGui.QIcon('img/AppIcon.png'))
+                msg.exec_()
+
+            else:
+                userdata = open('data/user.dat','rb')
+                users = pickle.load(userdata)
+                userdata.close()
+                if username in users.keys():
+                    if password != users[username]:
                         msg = QtWidgets.QMessageBox()
                         msg.setIcon(QtWidgets.QMessageBox.Warning)
-                        msg.setText("Invalid account!")
+                        msg.setText("Incorrect password!")
                         msg.setWindowTitle("Warning")
                         msg.setWindowIcon(QtGui.QIcon('img/AppIcon.png'))
                         msg.exec_()
+                    else:
+                        user = User()
+                        widget.removeWidget(self)
+                        widget.addWidget(user)
+                        widget.setCurrentWidget(user)
+                        user.setupTable(username)
+                else: 
+                    msg = QtWidgets.QMessageBox()
+                    msg.setIcon(QtWidgets.QMessageBox.Warning)
+                    msg.setText("Incorrect username!")
+                    msg.setWindowTitle("Warning")
+                    msg.setWindowIcon(QtGui.QIcon('img/AppIcon.png'))
+                    msg.exec_()
                     # except EOFError:
                     #     msg = QtWidgets.QMessageBox()
                     #     msg.setIcon(QtWidgets.QMessageBox.Warning)
@@ -201,30 +211,58 @@ class User(QDialog):
                                         "QPushButton::pressed" "{" "background-color: #CCE5FF; ""}" )
         self.btnDeleteTask.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
 
-        self.listOfTask.setColumnWidth(0, 300)
-        self.listOfTask.setColumnWidth(1, 190)
-        self.listOfTask.setColumnWidth(2, 120)
-        self.listOfTask.setColumnWidth(3, 90)
+        self.listOfTask.setColumnWidth(0, 500)
+        self.listOfTask.setColumnWidth(1, 300)
+        self.listOfTask.setColumnWidth(2, 220)
+        self.listOfTask.setColumnWidth(3, 220)
         self.btnAddTask.clicked.connect(self.addTask)
         self.btnDeleteTask.clicked.connect(self.deleteTask)
         self.btnSignOut_user.clicked.connect(self.gotoLogin)
+        # self.setupTable()
     
-    def setTable(self, username):
-        with open ('data/user.dat', 'rb') as userdata:
-            while True:
-                row = pickle.load(userdata)
-                    # if row[0] == username:
-                    #     # set table
+    def setupTable(self, username):
+        if os.path.getsize('data/task.dat') != 0:
+            taskFile = open('data/task.dat', 'rb')
+            tasks = pickle.load(taskFile)
+            taskFile.close()
+            if username in tasks.keys():
+                for row in len(tasks[username]):
+                    task = QtWidgets.QTableWidgetItem(tasks[username][row][0])
+                    address = QtWidgets.QTableWidgetItem(tasks[username][row][1])
+                    start = QDateTimeEdit(datetime.strptime(tasks[username][row][2], 'dd.MM.yyyy - hh:mm'))
+                    end = QDateTimeEdit(datetime.strptime(tasks[username][row][3], 'dd.MM.yyyy - hh:mm'))
+                    chkBoxItem = QtWidgets.QTableWidgetItem("Done")
+                    chkBoxItem.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
+                    if not tasks[username][row][4] :
+                        chkBoxItem.setCheckState(QtCore.Qt.Unchecked)
+                    else:
+                        chkBoxItem.setCheckState(QtCore.Qt.Checked)
+                    self.listOfUser.insertRow(self.listOfUser.rowCount())
+                    self.listOfUser.setItem(row, 0, task)
+                    self.listOfUser.setItem(row, 1, address)
+                    self.listOfUser.setItem(row, 2, start)
+                    self.listOfUser.setItem(row, 3, end)
+                    self.listOfUser.setItem(row, 4, chkBoxItem)
+
+
 
     def addTask(self):
         self.listOfTask.insertRow(self.listOfTask.rowCount())
-
-        # create checkbox
         for row in range(self.listOfTask.rowCount()):
             chkBoxItem = QtWidgets.QTableWidgetItem("Done")
             chkBoxItem.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
             chkBoxItem.setCheckState(QtCore.Qt.Unchecked)
-            self.listOfTask.setItem(row, 3, chkBoxItem)
+            self.listOfTask.setItem(row, 4, chkBoxItem)
+
+            dateTimeStart= QDateTimeEdit(QtCore.QDateTime.currentDateTime())
+            dateTimeStart.setFrame(False)
+            dateTimeStart.setDisplayFormat('dd.MM.yyyy - hh:mm')
+            self.listOfTask.setCellWidget(row, 3, dateTimeStart)
+
+            dateTimeEnd = QDateTimeEdit(QtCore.QDateTime.currentDateTime())
+            dateTimeEnd.setFrame(False)
+            dateTimeEnd.setDisplayFormat('dd.MM.yyyy - hh:mm')
+            self.listOfTask.setCellWidget(row, 2, dateTimeEnd)
             
     def deleteTask(self):
         if self.listOfTask.rowCount()>0:
@@ -269,6 +307,7 @@ class Admin(QDialog):
         self.setUpTable()
 
     def setUpTable(self):
+
         fileUser = open ('data/user.dat', 'rb')
         users = pickle.load(fileUser)
         row = 0

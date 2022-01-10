@@ -3,10 +3,8 @@ from PyQt5.uic import loadUi
 from PyQt5 import QtCore, QtWidgets, QtGui
 from PyQt5.QtWidgets import QDateTimeEdit, QDialog, QApplication
 
-from signIn import SignIn
-
 class User(QDialog):
-    def __init__(self, widget):
+    def __init__(self):
         super(User, self).__init__()
         loadUi("ui/userInterface.ui", self)
         self.btnSignOut_user.setStyleSheet("QPushButton""{""color: #fff; background-color: rgb(0, 85, 127);border-radius: 10px; border: 1px solid rgb(0, 85, 127);""}"
@@ -40,13 +38,13 @@ class User(QDialog):
         self.listOfTask.setColumnWidth(3, 220)
         self.btnAddTask.clicked.connect(self.addTask)
         self.btnDeleteTask.clicked.connect(self.deleteTask)
-        self.btnSignOut_user.clicked.connect(self.signOut)
+        # self.btnSignOut_user.clicked.connect(self.signOut)
 
-    def signOut(self, widget):
-        login = SignIn()
-        widget.removeWidget(self)
-        widget.addWidget(login)
-        widget.setCurrentWidget(login)
+    # def signOut(self):
+    #     login = SignIn()
+    #     widget.removeWidget(self)
+    #     widget.addWidget(login)
+    #     widget.setCurrentWidget(login)
 
         
     def addTask(self):
@@ -57,12 +55,14 @@ class User(QDialog):
             chkBoxItem.setCheckState(QtCore.Qt.Unchecked)
             self.listOfTask.setItem(row, 4, chkBoxItem)
 
-            dateTimeStart= QDateTimeEdit()
+            dateTimeStart= QDateTimeEdit(QtCore.QDateTime.currentDateTime())
             dateTimeStart.setFrame(False)
+            dateTimeStart.setDisplayFormat('dd.MM.yyyy - hh:mm')
             self.listOfTask.setCellWidget(row, 3, dateTimeStart)
 
-            dateTimeEnd = QDateTimeEdit()
+            dateTimeEnd = QDateTimeEdit(QtCore.QDateTime.currentDateTime())
             dateTimeEnd.setFrame(False)
+            dateTimeEnd.setDisplayFormat('dd.MM.yyyy - hh:mm')
             self.listOfTask.setCellWidget(row, 2, dateTimeEnd)
             
             
@@ -74,13 +74,13 @@ class User(QDialog):
 
         
 #test interface display
-# app = QApplication(sys.argv)
-# user = User()
-# widget = QtWidgets.QStackedWidget()
-# widget.setWindowTitle('KATodoList')
-# widget.setWindowIcon(QtGui.QIcon('img/AppIcon.png'))
-# widget.addWidget(user)
-# widget.setFixedHeight(920)
-# widget.setFixedWidth(1620)
-# widget.show()
-# sys.exit(app.exec_())
+app = QApplication(sys.argv)
+user = User()
+widget = QtWidgets.QStackedWidget()
+widget.setWindowTitle('KATodoList')
+widget.setWindowIcon(QtGui.QIcon('img/AppIcon.png'))
+widget.addWidget(user)
+widget.setFixedHeight(920)
+widget.setFixedWidth(1620)
+widget.show()
+sys.exit(app.exec_())
