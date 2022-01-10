@@ -1,3 +1,4 @@
+import os
 import sys, pickle
 from PyQt5.uic import loadUi
 from PyQt5 import QtWidgets, QtGui, QtCore
@@ -22,7 +23,11 @@ class SignIn(QDialog):
     def gotoSignUp(self):
         signup = SignUp()
         widget.addWidget(signup)
-        widget.setCurrentIndex(widget.currentIndex()+1)
+        widget.removeWidget(self)
+        widget.setCurrentWidget(signup)
+        # pk = open('data/user.dat','rb')
+        # pk1 = pickle.load(pk)
+        # print(pk1)
 
 
     def login(self):
@@ -33,7 +38,7 @@ class SignIn(QDialog):
             if password == "admin123":
                 admin = Admin()
                 widget.addWidget(admin)
-                widget.setCurrentIndex(widget.currentIndex()+1)
+                widget.setCurrentWidget(admin)
             else:
                 msg = QtWidgets.QMessageBox()
                 msg.setIcon(QtWidgets.QMessageBox.Warning)
@@ -43,38 +48,36 @@ class SignIn(QDialog):
                 msg.exec_()
         else:
             with open ('data/user.dat', 'rb') as userdata:
-                while True:
-                    try:
-                        row = pickle.load(userdata)
-                        if row[0] == username:
-                            if row[1] == password:
-                                user = User()
-                                user.setTable(row[0])
-                                widget.addWidget(user)
-                                widget.setCurrentIndex(widget.currentIndex()+3)
-                                break
-                            else:
-                                msg = QtWidgets.QMessageBox()
-                                msg.setIcon(QtWidgets.QMessageBox.Warning)
-                                msg.setText("Incorrect password!")
-                                msg.setWindowTitle("Warning")
-                                msg.setWindowIcon(QtGui.QIcon('img/AppIcon.png'))
-                                msg.exec_()
+                for line in userdata:    #you don't have to use "line" you can use whatever name you want
+                    if username in line[0]:
+                        if line[1] == password:
+                            user = User()
+                            # user.setTable(line[0])
+                            widget.addWidget(user)
+                            widget.setCurrentIndex(widget.currentIndex()+3)
+                            break
                         else:
                             msg = QtWidgets.QMessageBox()
                             msg.setIcon(QtWidgets.QMessageBox.Warning)
-                            msg.setText("Invalid account!")
+                            msg.setText("Incorrect password!")
                             msg.setWindowTitle("Warning")
                             msg.setWindowIcon(QtGui.QIcon('img/AppIcon.png'))
                             msg.exec_()
-                    except EOFError:
+                    else:
                         msg = QtWidgets.QMessageBox()
                         msg.setIcon(QtWidgets.QMessageBox.Warning)
                         msg.setText("Invalid account!")
                         msg.setWindowTitle("Warning")
                         msg.setWindowIcon(QtGui.QIcon('img/AppIcon.png'))
                         msg.exec_()
-                        break
+                    # except EOFError:
+                    #     msg = QtWidgets.QMessageBox()
+                    #     msg.setIcon(QtWidgets.QMessageBox.Warning)
+                    #     msg.setText("Invalid account!")
+                    #     msg.setWindowTitle("Warning")
+                    #     msg.setWindowIcon(QtGui.QIcon('img/AppIcon.png'))
+                    #     msg.exec_()
+                    #     break
         
                                     
 class SignUp(QDialog):
@@ -92,17 +95,84 @@ class SignUp(QDialog):
         self.passwordFillUp.setEchoMode(QtWidgets.QLineEdit.Password)
         self.verifyPassword.setEchoMode(QtWidgets.QLineEdit.Password)
         self.btnSignIn_Up.clicked.connect(self.gotoSignIn)
-        self.btnSignUp_Up.clicked.connect(self.login)
+        self.btnSignUp_Up.clicked.connect(self.createAccount)
 
     def gotoSignIn(self):
-        # goto_signIn = SignIn()
-        # widget.addWidget(goto_signIn)
-        widget.setCurrentIndex(widget.currentIndex()-1)
+        goto_signIn = SignIn()
+        widget.removeWidget(self)
+        widget.addWidget(goto_signIn)
+        widget.setCurrentWidget(goto_signIn)
     
-    def login(self):
-        # _login = User()
-        # widget.addWidget(_login)
-        widget.setCurrentIndex(widget.currentIndex()+1)
+    def createAccount(self):
+        userName = self.useNameFill.text()
+        password = self.passwordFillUp.text()
+        verifyPass = self.verifyPassword.text()
+
+        if os.path.getsize('data/user.dat') == 0:
+            userdata = open('data/user.dat','wb')
+            users = dict()
+            if password != verifyPass:
+                msg = QtWidgets.QMessageBox()
+                msg.setIcon(QtWidgets.QMessageBox.Warning)
+                msg.setText("Verify Password is incorrect!")
+                msg.setWindowTitle("Warning")
+                msg.setWindowIcon(QtGui.QIcon('img/AppIcon.png'))
+                msg.exec_()
+
+            elif password == verifyPass:
+                users[userName]= password
+                pickle.dump(users, userdata)
+                userdata.close()
+                signin = SignIn()
+                widget.removeWidget(self)
+                widget.addWidget(signin)
+                widget.setCurrentWidget(signin)
+
+        else: 
+            userdata = open('data/user.dat','rb+')
+            users = pickle.load(userdata)
+            print(users)
+          
+            if userName in users.keys():
+                msg = QtWidgets.QMessageBox()
+                msg.setIcon(QtWidgets.QMessageBox.Warning)
+                msg.setText("Username existed!")
+                msg.setWindowTitle("Warning")
+                msg.setWindowIcon(QtGui.QIcon('img/AppIcon.png'))
+                msg.exec_()
+            else:
+                if password != verifyPass:
+                    msg = QtWidgets.QMessageBox()
+                    msg.setIcon(QtWidgets.QMessageBox.Warning)
+                    msg.setText("Verify Password is incorrect!")
+                    msg.setWindowTitle("Warning")
+                    msg.setWindowIcon(QtGui.QIcon('img/AppIcon.png'))
+                    msg.exec_()
+
+                elif password == verifyPass:
+                    users[userName]= password
+                    print(users)
+                    userdata.seek(0)
+                    userdata.truncate()
+                    pickle.dump(users, userdata)
+                    userdata.close()
+                    signin = SignIn()
+                    widget.removeWidget(self)
+                    widget.addWidget(signin)
+                    widget.setCurrentWidget(signin)
+        ##########################################
+        # neu file rong:
+        #     wb
+        #     if pass != verify: thong bao loi 
+        #     else pickle.dump => signIn
+        # if file khong rong:
+        #     rb+
+        #     seek(0)
+        #     truncate()
+        #     if username in file: account existed 
+        #     else:
+        #         if pass != verify: thong bao loi
+        #         else: pickle.dump => signIn
 
 class User(QDialog):
     def __init__(self):
@@ -165,7 +235,10 @@ class User(QDialog):
             self.listOfTask.removeRow(currentRow)
     
     def gotoLogin(self):
-        widget.setCurrentIndex(widget.currentIndex()-2)
+        signIn = SignIn()
+        widget.removeWidget(self)
+        widget.addWidget(signIn)
+        widget.setCurrentWidget(signIn)
 
 class Admin(QDialog):
     def __init__(self):
@@ -205,7 +278,10 @@ class Admin(QDialog):
             currentRow = self.listOfUser.currentRow()
             self.listOfUser.removeRow(currentRow)
     def logout(self):
-        widget.setCurrentIndex(0)
+        signIn = SignIn()
+        widget.removeWidget(self)
+        widget.addWidget(signIn)
+        widget.setCurrentWidget(signIn)
         
 
 #main
