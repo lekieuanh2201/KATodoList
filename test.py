@@ -25,10 +25,6 @@ class SignIn(QDialog):
         widget.addWidget(signup)
         widget.removeWidget(self)
         widget.setCurrentWidget(signup)
-        # pk = open('data/user.dat','rb')
-        # pk1 = pickle.load(pk)
-        # print(pk1)
-
 
     def login(self):
         username = self.useNameFill.text()
@@ -37,6 +33,7 @@ class SignIn(QDialog):
         if username == "admin":
             if password == "admin123":
                 admin = Admin()
+                # admin.setUpTable()
                 widget.addWidget(admin)
                 widget.setCurrentWidget(admin)
             else:
@@ -48,7 +45,7 @@ class SignIn(QDialog):
                 msg.exec_()
         else:
             with open ('data/user.dat', 'rb') as userdata:
-                for line in userdata:    #you don't have to use "line" you can use whatever name you want
+                for line in userdata:  
                     if username in line[0]:
                         if line[1] == password:
                             user = User()
@@ -264,11 +261,26 @@ class Admin(QDialog):
                                         "QPushButton::pressed" "{" "background-color: #CCE5FF; ""}" )
         self.btndeleteUser.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
 
-        self.listOfUser.setColumnWidth(0, 400)
-        self.listOfUser.setColumnWidth(1, 300)
+        self.listOfUser.setColumnWidth(0, 720)
+        self.listOfUser.setColumnWidth(1, 650)
         self.btnaddUser.clicked.connect(self.addUser)
         self.btndeleteUser.clicked.connect(self.deleteUser)
         self.btnsignOutAdmin.clicked.connect(self.logout)
+        self.setUpTable()
+
+    def setUpTable(self):
+        fileUser = open ('data/user.dat', 'rb')
+        users = pickle.load(fileUser)
+        row = 0
+        for user in users.keys():
+            username = QtWidgets.QTableWidgetItem(user)
+            password = QtWidgets.QTableWidgetItem(users[user])
+            self.listOfUser.insertRow(self.listOfUser.rowCount())
+            self.listOfUser.setItem(row, 0, username)
+            self.listOfUser.setItem(row, 1, password)
+            row += 1
+        fileUser.close()
+
 
     def addUser(self):
         self.listOfUser.insertRow(self.listOfUser.rowCount())
