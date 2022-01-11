@@ -23,7 +23,7 @@
   <widget class="QPushButton" name="btndeleteUser">
    <property name="geometry">
     <rect>
-     <x>1400</x>
+     <x>1250</x>
      <y>800</y>
      <width>120</width>
      <height>40</height>
@@ -96,10 +96,10 @@ font: 63 9pt &quot;Yu Gothic UI Semibold&quot;;</string>
     <string>Add User</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="btneditUser">
+  <widget class="QPushButton" name="btnsaveUser">
    <property name="geometry">
     <rect>
-     <x>1250</x>
+     <x>1400</x>
      <y>800</y>
      <width>120</width>
      <height>40</height>
@@ -110,7 +110,7 @@ font: 63 9pt &quot;Yu Gothic UI Semibold&quot;;</string>
 font: 63 9pt &quot;Yu Gothic UI Semibold&quot;;</string>
    </property>
    <property name="text">
-    <string>Edit User</string>
+    <string>Save all</string>
    </property>
   </widget>
   <widget class="QLabel" name="toDoList">

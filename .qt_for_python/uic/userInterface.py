@@ -43,11 +43,6 @@ class Ui_userInterface(object):
 "background-color: rgb(210, 212, 255);\n"
 "font: 63 9pt \"Yu Gothic UI Semibold\";")
         self.btnSignOut_user.setObjectName("btnSignOut_user")
-        self.btnEditTask = QtWidgets.QPushButton(userInterface)
-        self.btnEditTask.setGeometry(QtCore.QRect(1250, 800, 120, 40))
-        self.btnEditTask.setStyleSheet("background-color: rgb(210, 212, 255);\n"
-"font: 63 9pt \"Yu Gothic UI Semibold\";")
-        self.btnEditTask.setObjectName("btnEditTask")
         self.toDoList = QtWidgets.QLabel(userInterface)
         self.toDoList.setGeometry(QtCore.QRect(670, 50, 300, 100))
         font = QtGui.QFont()
@@ -62,12 +57,12 @@ class Ui_userInterface(object):
 "font: 63 9pt \"Yu Gothic UI Semibold\";")
         self.btnAddTask.setObjectName("btnAddTask")
         self.btnDeleteTask = QtWidgets.QPushButton(userInterface)
-        self.btnDeleteTask.setGeometry(QtCore.QRect(1400, 800, 120, 40))
+        self.btnDeleteTask.setGeometry(QtCore.QRect(1250, 800, 120, 40))
         self.btnDeleteTask.setStyleSheet("background-color: rgb(210, 212, 255);\n"
 "font: 63 9pt \"Yu Gothic UI Semibold\";")
         self.btnDeleteTask.setObjectName("btnDeleteTask")
         self.btnSaveAll = QtWidgets.QPushButton(userInterface)
-        self.btnSaveAll.setGeometry(QtCore.QRect(960, 800, 120, 40))
+        self.btnSaveAll.setGeometry(QtCore.QRect(1400, 800, 120, 40))
         self.btnSaveAll.setStyleSheet("background-color: rgb(210, 212, 255);\n"
 "font: 63 9pt \"Yu Gothic UI Semibold\";")
         self.btnSaveAll.setObjectName("btnSaveAll")
@@ -89,7 +84,6 @@ class Ui_userInterface(object):
         item = self.listOfTask.horizontalHeaderItem(4)
         item.setText(_translate("userInterface", "Check"))
         self.btnSignOut_user.setText(_translate("userInterface", "Sign out"))
-        self.btnEditTask.setText(_translate("userInterface", "Edit Task"))
         self.toDoList.setText(_translate("userInterface", "<html><head/><body><p><span style=\" font-size:36pt;\">Todo list</span></p></body></html>"))
         self.btnAddTask.setText(_translate("userInterface", "Add Task"))
         self.btnDeleteTask.setText(_translate("userInterface", "Delete Task"))

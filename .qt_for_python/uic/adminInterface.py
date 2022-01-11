@@ -20,7 +20,7 @@ class Ui_adminInterface(object):
         adminInterface.setWindowIcon(icon)
         adminInterface.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.btndeleteUser = QtWidgets.QPushButton(adminInterface)
-        self.btndeleteUser.setGeometry(QtCore.QRect(1400, 800, 120, 40))
+        self.btndeleteUser.setGeometry(QtCore.QRect(1250, 800, 120, 40))
         self.btndeleteUser.setStyleSheet("background-color: rgb(210, 212, 255);\n"
 "font: 63 9pt \"Yu Gothic UI Semibold\";")
         self.btndeleteUser.setObjectName("btndeleteUser")
@@ -46,11 +46,11 @@ class Ui_adminInterface(object):
         self.btnaddUser.setStyleSheet("background-color: rgb(210, 212, 255);\n"
 "font: 63 9pt \"Yu Gothic UI Semibold\";")
         self.btnaddUser.setObjectName("btnaddUser")
-        self.btneditUser = QtWidgets.QPushButton(adminInterface)
-        self.btneditUser.setGeometry(QtCore.QRect(1250, 800, 120, 40))
-        self.btneditUser.setStyleSheet("background-color: rgb(210, 212, 255);\n"
+        self.btnsaveUser = QtWidgets.QPushButton(adminInterface)
+        self.btnsaveUser.setGeometry(QtCore.QRect(1400, 800, 120, 40))
+        self.btnsaveUser.setStyleSheet("background-color: rgb(210, 212, 255);\n"
 "font: 63 9pt \"Yu Gothic UI Semibold\";")
-        self.btneditUser.setObjectName("btneditUser")
+        self.btnsaveUser.setObjectName("btnsaveUser")
         self.toDoList = QtWidgets.QLabel(adminInterface)
         self.toDoList.setGeometry(QtCore.QRect(670, 50, 300, 100))
         font = QtGui.QFont()
@@ -73,5 +73,5 @@ class Ui_adminInterface(object):
         item = self.listOfUser.horizontalHeaderItem(1)
         item.setText(_translate("adminInterface", "Password"))
         self.btnaddUser.setText(_translate("adminInterface", "Add User"))
-        self.btneditUser.setText(_translate("adminInterface", "Edit User"))
+        self.btnsaveUser.setText(_translate("adminInterface", "Save all"))
         self.toDoList.setText(_translate("adminInterface", "<html><head/><body><p><span style=\" font-size:36pt;\">Todo list</span></p></body></html>"))

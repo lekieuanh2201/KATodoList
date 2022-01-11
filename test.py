@@ -35,6 +35,7 @@ class SignIn(QDialog):
             if password == "admin123":
                 admin = Admin()
                 widget.addWidget(admin)
+                widget.removeWidget(self)
                 widget.setCurrentWidget(admin)
             else:
                 msg = QtWidgets.QMessageBox()
@@ -47,7 +48,7 @@ class SignIn(QDialog):
             if os.path.getsize('data/user.dat') == 0:
                 msg = QtWidgets.QMessageBox()
                 msg.setIcon(QtWidgets.QMessageBox.Warning)
-                msg.setText("Invalid account!")
+                msg.setText("Account does not exist!")
                 msg.setWindowTitle("Warning")
                 msg.setWindowIcon(QtGui.QIcon('img/AppIcon.png'))
                 msg.exec_()
@@ -73,7 +74,7 @@ class SignIn(QDialog):
                 else: 
                     msg = QtWidgets.QMessageBox()
                     msg.setIcon(QtWidgets.QMessageBox.Warning)
-                    msg.setText("Incorrect username!")
+                    msg.setText("Account does not exist!")
                     msg.setWindowTitle("Warning")
                     msg.setWindowIcon(QtGui.QIcon('img/AppIcon.png'))
                     msg.exec_()
@@ -114,7 +115,13 @@ class SignUp(QDialog):
         userName = self.useNameFill.text()
         password = self.passwordFillUp.text()
         verifyPass = self.verifyPassword.text()
-
+        if userName == 'admin':
+            msg = QtWidgets.QMessageBox()
+            msg.setIcon(QtWidgets.QMessageBox.Warning)
+            msg.setText("Existed account!")
+            msg.setWindowTitle("Warning")
+            msg.setWindowIcon(QtGui.QIcon('img/AppIcon.png'))
+            msg.exec_()
         if os.path.getsize('data/user.dat') == 0:
             userdata = open('data/user.dat','wb')
             users = dict()
@@ -201,10 +208,10 @@ class User(QDialog):
                                         "QPushButton::pressed" "{" "background-color: #CCE5FF; ""}" )
         self.btnAddTask.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         
-        self.btnEditTask.setStyleSheet("QPushButton""{""border-radius: 10px; border: 1px solid rgb(0, 85, 127);""}"
-                                        "QPushButton::hover""{" "font-weight:bold; ""}"
-                                        "QPushButton::pressed" "{" "background-color: #CCE5FF; ""}" )
-        self.btnEditTask.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        # self.btnEditTask.setStyleSheet("QPushButton""{""border-radius: 10px; border: 1px solid rgb(0, 85, 127);""}"
+        #                                 "QPushButton::hover""{" "font-weight:bold; ""}"
+        #                                 "QPushButton::pressed" "{" "background-color: #CCE5FF; ""}" )
+        # self.btnEditTask.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         
         self.btnDeleteTask.setStyleSheet("QPushButton""{""border-radius: 10px; border: 1px solid rgb(0, 85, 127);""}"
                                         "QPushButton::hover""{" "font-weight:bold; ""}"
@@ -243,7 +250,7 @@ class User(QDialog):
                     self.listOfUser.setItem(row, 2, start)
                     self.listOfUser.setItem(row, 3, end)
                     self.listOfUser.setItem(row, 4, chkBoxItem)
-
+        else: pass    
 
 
     def addTask(self):
@@ -268,6 +275,7 @@ class User(QDialog):
         if self.listOfTask.rowCount()>0:
             currentRow = self.listOfTask.currentRow()
             self.listOfTask.removeRow(currentRow)
+
     
     def gotoLogin(self):
         signIn = SignIn()
@@ -289,10 +297,10 @@ class Admin(QDialog):
                                         "QPushButton::pressed" "{" "background-color: #CCE5FF; ""}" )
         self.btnaddUser.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         
-        self.btneditUser.setStyleSheet("QPushButton""{""border-radius: 10px; border: 1px solid rgb(0, 85, 127);""}"
+        self.btnsaveUser.setStyleSheet("QPushButton""{""border-radius: 10px; border: 1px solid rgb(0, 85, 127);""}"
                                         "QPushButton::hover""{" "font-weight:bold; ""}"
                                         "QPushButton::pressed" "{" "background-color: #CCE5FF; ""}" )
-        self.btneditUser.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.btnsaveUser.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         
         self.btndeleteUser.setStyleSheet("QPushButton""{""border-radius: 10px; border: 1px solid rgb(0, 85, 127);""}"
                                         "QPushButton::hover""{" "font-weight:bold; ""}"
@@ -303,11 +311,11 @@ class Admin(QDialog):
         self.listOfUser.setColumnWidth(1, 650)
         self.btnaddUser.clicked.connect(self.addUser)
         self.btndeleteUser.clicked.connect(self.deleteUser)
+        self.btnsaveUser.clicked.connect(self.saveAll)
         self.btnsignOutAdmin.clicked.connect(self.logout)
         self.setUpTable()
 
     def setUpTable(self):
-
         fileUser = open ('data/user.dat', 'rb')
         users = pickle.load(fileUser)
         row = 0
@@ -328,6 +336,17 @@ class Admin(QDialog):
         if self.listOfUser.rowCount()>0:
             currentRow = self.listOfUser.currentRow()
             self.listOfUser.removeRow(currentRow)
+
+    def saveAll(self):
+        users = dict()
+        for row in range(self.listOfUser.rowCount()):
+            userName = self.listOfUser.item(row, 0).text()
+            password = self.listOfUser.item(row, 1).text()
+            users[userName]=password
+        fileUser = open('data/user.dat','wb')
+        pickle.dump(users,fileUser)
+        fileUser.close()
+
     def logout(self):
         signIn = SignIn()
         widget.removeWidget(self)

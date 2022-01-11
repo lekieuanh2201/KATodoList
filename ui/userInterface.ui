@@ -80,7 +80,7 @@ font: 63 9pt &quot;Yu Gothic UI Semibold&quot;;</string>
     <string>Sign out</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="btnEditTask">
+  <!-- <widget class="QPushButton" name="btnEditTask">
    <property name="geometry">
     <rect>
      <x>1250</x>
@@ -96,7 +96,7 @@ font: 63 9pt &quot;Yu Gothic UI Semibold&quot;;</string>
    <property name="text">
     <string>Edit Task</string>
    </property>
-  </widget>
+  </widget> -->
   <widget class="QLabel" name="toDoList">
    <property name="geometry">
     <rect>
@@ -137,7 +137,7 @@ font: 63 9pt &quot;Yu Gothic UI Semibold&quot;;</string>
   <widget class="QPushButton" name="btnDeleteTask">
    <property name="geometry">
     <rect>
-     <x>1400</x>
+     <x>1250</x>
      <y>800</y>
      <width>120</width>
      <height>40</height>
@@ -154,7 +154,7 @@ font: 63 9pt &quot;Yu Gothic UI Semibold&quot;;</string>
   <widget class="QPushButton" name="btnSaveAll">
    <property name="geometry">
     <rect>
-     <x>960</x>
+     <x>1400</x>
      <y>800</y>
      <width>120</width>
      <height>40</height>

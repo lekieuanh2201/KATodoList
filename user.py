@@ -22,10 +22,10 @@ class User(QDialog):
                                         "QPushButton::pressed" "{" "background-color: #CCE5FF; ""}" )
         self.btnAddTask.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         
-        self.btnEditTask.setStyleSheet("QPushButton""{""border-radius: 10px; border: 1px solid rgb(0, 85, 127);""}"
-                                        "QPushButton::hover""{" "font-weight:bold; ""}"
-                                        "QPushButton::pressed" "{" "background-color: #CCE5FF; ""}" )
-        self.btnEditTask.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        # self.btnEditTask.setStyleSheet("QPushButton""{""border-radius: 10px; border: 1px solid rgb(0, 85, 127);""}"
+        #                                 "QPushButton::hover""{" "font-weight:bold; ""}"
+        #                                 "QPushButton::pressed" "{" "background-color: #CCE5FF; ""}" )
+        # self.btnEditTask.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         
         self.btnDeleteTask.setStyleSheet("QPushButton""{""border-radius: 10px; border: 1px solid rgb(0, 85, 127);""}"
                                         "QPushButton::hover""{" "font-weight:bold; ""}"
