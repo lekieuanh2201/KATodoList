@@ -225,9 +225,11 @@ class User(QDialog):
         self.btnAddTask.clicked.connect(self.addTask)
         self.btnDeleteTask.clicked.connect(self.deleteTask)
         self.btnSignOut_user.clicked.connect(self.gotoLogin)
+        self.btnSaveAll.clicked.connect(self.saveAll)
         # self.setupTable()
     
     def setupTable(self, username):
+        self.uName = username
         if os.path.getsize('data/task.dat') != 0:
             taskFile = open('data/task.dat', 'rb')
             tasks = pickle.load(taskFile)
@@ -250,7 +252,21 @@ class User(QDialog):
                     self.listOfUser.setItem(row, 2, start)
                     self.listOfUser.setItem(row, 3, end)
                     self.listOfUser.setItem(row, 4, chkBoxItem)
-        else: pass    
+
+    def saveAll(self):
+        
+        # taskfile = open('data/task.dat','rb')
+        # task = pickle.load(taskfile)
+        # taskfile.close()
+        task= dict()
+        for row in range(self.listOfTask.rowCount()):
+            tk=self.listOfTask.item(row,1).text()
+            task[self.uName]=row
+            task[self.uName][row][0]=tk
+            # task[self.uName][row][1]=self.listOfTask.item(row,1).text()
+            # task[self.uName][row][2]=self.listOfTask.item(row,2).text()
+            # task[self.uName][row][3]=self.listOfTask.item(row,3).text()
+            print(tk)
 
 
     def addTask(self):
