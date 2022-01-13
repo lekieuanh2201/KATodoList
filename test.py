@@ -1,9 +1,8 @@
-import datetime
 import os
 import sys, pickle
 from PyQt5.uic import loadUi
 from PyQt5 import QtWidgets, QtGui, QtCore
-from PyQt5.QtWidgets import QDateTimeEdit, QDialog, QApplication, QMainWindow
+from PyQt5.QtWidgets import QCheckBox, QDialog, QApplication
 
 class SignIn(QDialog):
     def __init__(self):
@@ -86,8 +85,7 @@ class SignIn(QDialog):
                     #     msg.setWindowIcon(QtGui.QIcon('img/AppIcon.png'))
                     #     msg.exec_()
                     #     break
-        
-                                    
+                                          
 class SignUp(QDialog):
     def __init__(self):
         super(SignUp, self).__init__()
@@ -174,19 +172,6 @@ class SignUp(QDialog):
                     widget.removeWidget(self)
                     widget.addWidget(signin)
                     widget.setCurrentWidget(signin)
-        ##########################################
-        # neu file rong:
-        #     wb
-        #     if pass != verify: thong bao loi 
-        #     else pickle.dump => signIn
-        # if file khong rong:
-        #     rb+
-        #     seek(0)
-        #     truncate()
-        #     if username in file: account existed 
-        #     else:
-        #         if pass != verify: thong bao loi
-        #         else: pickle.dump => signIn
 
 class User(QDialog):
     def __init__(self):
@@ -208,25 +193,19 @@ class User(QDialog):
                                         "QPushButton::pressed" "{" "background-color: #CCE5FF; ""}" )
         self.btnAddTask.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         
-        # self.btnEditTask.setStyleSheet("QPushButton""{""border-radius: 10px; border: 1px solid rgb(0, 85, 127);""}"
-        #                                 "QPushButton::hover""{" "font-weight:bold; ""}"
-        #                                 "QPushButton::pressed" "{" "background-color: #CCE5FF; ""}" )
-        # self.btnEditTask.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        
         self.btnDeleteTask.setStyleSheet("QPushButton""{""border-radius: 10px; border: 1px solid rgb(0, 85, 127);""}"
                                         "QPushButton::hover""{" "font-weight:bold; ""}"
                                         "QPushButton::pressed" "{" "background-color: #CCE5FF; ""}" )
         self.btnDeleteTask.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
 
-        self.listOfTask.setColumnWidth(0, 500)
-        self.listOfTask.setColumnWidth(1, 300)
+        self.listOfTask.setColumnWidth(0, 550)
+        self.listOfTask.setColumnWidth(1, 350)
         self.listOfTask.setColumnWidth(2, 220)
         self.listOfTask.setColumnWidth(3, 220)
         self.btnAddTask.clicked.connect(self.addTask)
         self.btnDeleteTask.clicked.connect(self.deleteTask)
         self.btnSignOut_user.clicked.connect(self.gotoLogin)
         self.btnSaveAll.clicked.connect(self.saveAll)
-        # self.setupTable()
     
     def setupTable(self, username):
         self.uName = username
@@ -235,58 +214,83 @@ class User(QDialog):
             tasks = pickle.load(taskFile)
             taskFile.close()
             if username in tasks.keys():
-                for row in len(tasks[username]):
-                    task = QtWidgets.QTableWidgetItem(tasks[username][row][0])
-                    address = QtWidgets.QTableWidgetItem(tasks[username][row][1])
-                    start = QDateTimeEdit(datetime.strptime(tasks[username][row][2], 'dd.MM.yyyy - hh:mm'))
-                    end = QDateTimeEdit(datetime.strptime(tasks[username][row][3], 'dd.MM.yyyy - hh:mm'))
-                    chkBoxItem = QtWidgets.QTableWidgetItem("Done")
-                    chkBoxItem.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
-                    if not tasks[username][row][4] :
+                for row in range(len(tasks[username])):
+                    task = QtWidgets.QTableWidgetItem(tasks[username][row]['task'])
+                    address = QtWidgets.QTableWidgetItem(tasks[username][row]['address'])
+                    time = QtWidgets.QTableWidgetItem(tasks[username][row]['time'])
+                    chkBoxItem = QCheckBox('Done')
+                    if not tasks[username][row]['done'] :
                         chkBoxItem.setCheckState(QtCore.Qt.Unchecked)
                     else:
                         chkBoxItem.setCheckState(QtCore.Qt.Checked)
-                    self.listOfUser.insertRow(self.listOfUser.rowCount())
-                    self.listOfUser.setItem(row, 0, task)
-                    self.listOfUser.setItem(row, 1, address)
-                    self.listOfUser.setItem(row, 2, start)
-                    self.listOfUser.setItem(row, 3, end)
-                    self.listOfUser.setItem(row, 4, chkBoxItem)
+                    self.listOfTask.insertRow(self.listOfTask.rowCount())
+                    self.listOfTask.setItem(row, 0, task)
+                    self.listOfTask.setItem(row, 1, address)
+                    self.listOfTask.setItem(row, 2, time)
+                    self.listOfTask.setCellWidget(row, 3, chkBoxItem)
 
     def saveAll(self):
-        
-        # taskfile = open('data/task.dat','rb')
-        # task = pickle.load(taskfile)
-        # taskfile.close()
-        task= dict()
+        checkTime = True
+        listTime = list()
         for row in range(self.listOfTask.rowCount()):
-            tk=self.listOfTask.item(row,1).text()
-            task[self.uName]=row
-            task[self.uName][row][0]=tk
-            # task[self.uName][row][1]=self.listOfTask.item(row,1).text()
-            # task[self.uName][row][2]=self.listOfTask.item(row,2).text()
-            # task[self.uName][row][3]=self.listOfTask.item(row,3).text()
-            print(tk)
-
+            if self.listOfTask.item(row,2).text() in listTime:
+                checkTime = False
+                break
+            else:
+                listTime.append(self.listOfTask.item(row,2).text())
+        if(checkTime):
+            if os.path.getsize('data/task.dat') != 0:
+                taskfile = open('data/task.dat','rb')
+                tasks = pickle.load(taskfile)
+                taskfile.close()
+                for row in range(self.listOfTask.rowCount()):
+                    # tk=self.listOfTask.item(row,1).text()
+                    tasks[self.uName][row]=dict()
+                    tasks[self.uName][row]['task']=self.listOfTask.item(row,0).text()
+                    tasks[self.uName][row]['address']=self.listOfTask.item(row,1).text()
+                    tasks[self.uName][row]['time']=self.listOfTask.item(row,2).text()
+                    if self.listOfTask.cellWidget(row,3).isChecked():
+                        tasks[self.uName][row]['done']= True
+                    else:  tasks[self.uName][row]['done']= False
+                    print(self.listOfTask.item(row,0).text())
+                file = open('data/task.dat','wb')
+                pickle.dump(tasks, file)
+                file.close()
+            else:
+                tasksDict = dict()
+                tasksDict[self.uName]=dict()
+                for row in range(self.listOfTask.rowCount()):
+                    tasksDict[self.uName][row]=dict()
+                    tasksDict[self.uName][row]['task']=self.listOfTask.item(row,0).text()
+                    tasksDict[self.uName][row]['address']=self.listOfTask.item(row,1).text()
+                    print(self.listOfTask.cellWidget(row,3).isChecked())
+                    tasksDict[self.uName][row]['time']=self.listOfTask.item(row,2).text()
+                    
+                    if self.listOfTask.cellWidget(row,3).isChecked():
+                        tasksDict[self.uName][row]['done']= True
+                    else:  tasksDict[self.uName][row]['done']= False
+                    
+                fileTasks = open('data/task.dat', 'wb')
+                pickle.dump(tasksDict, fileTasks)
+                fileTasks.close()
+        else:
+            msg = QtWidgets.QMessageBox()
+            msg.setIcon(QtWidgets.QMessageBox.Warning)
+            msg.setText("Overlapping time!")
+            msg.setWindowTitle("Warning")
+            msg.setWindowIcon(QtGui.QIcon('img/AppIcon.png'))
+            msg.exec_()
 
     def addTask(self):
         self.listOfTask.insertRow(self.listOfTask.rowCount())
-        for row in range(self.listOfTask.rowCount()):
-            chkBoxItem = QtWidgets.QTableWidgetItem("Done")
-            chkBoxItem.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
-            chkBoxItem.setCheckState(QtCore.Qt.Unchecked)
-            self.listOfTask.setItem(row, 4, chkBoxItem)
+        row = self.listOfTask.rowCount()-1
+        chkBoxItem = QCheckBox('Done')
+        chkBoxItem.setCheckState(QtCore.Qt.Unchecked)
+        self.listOfTask.setCellWidget(row, 3, chkBoxItem)
 
-            dateTimeStart= QDateTimeEdit(QtCore.QDateTime.currentDateTime())
-            dateTimeStart.setFrame(False)
-            dateTimeStart.setDisplayFormat('dd.MM.yyyy - hh:mm')
-            self.listOfTask.setCellWidget(row, 3, dateTimeStart)
+        dateTimeStart=QtWidgets.QTableWidgetItem(QtCore.QDateTime.currentDateTime().toString('dd.MM.yyyy - hh:mm'))
+        self.listOfTask.setItem(row, 2, dateTimeStart)
 
-            dateTimeEnd = QDateTimeEdit(QtCore.QDateTime.currentDateTime())
-            dateTimeEnd.setFrame(False)
-            dateTimeEnd.setDisplayFormat('dd.MM.yyyy - hh:mm')
-            self.listOfTask.setCellWidget(row, 2, dateTimeEnd)
-            
     def deleteTask(self):
         if self.listOfTask.rowCount()>0:
             currentRow = self.listOfTask.currentRow()
@@ -369,7 +373,6 @@ class Admin(QDialog):
         widget.addWidget(signIn)
         widget.setCurrentWidget(signIn)
         
-
 #main
 app = QApplication(sys.argv)
 signIn = SignIn()

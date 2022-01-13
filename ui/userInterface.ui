@@ -48,14 +48,14 @@ background-color: rgb(255, 255, 255);</string>
    </column>
    <column>
     <property name="text">
-     <string>Start</string>
+     <string>Time</string>
     </property>
    </column>
-   <column>
+   <!-- <column>
     <property name="text">
      <string>End</string>
     </property>
-   </column>
+   </column> -->
    <column>
     <property name="text">
      <string>Check</string>
