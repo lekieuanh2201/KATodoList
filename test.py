@@ -1,8 +1,9 @@
+from datetime import datetime
 import os
 import sys, pickle
 from PyQt5.uic import loadUi
 from PyQt5 import QtWidgets, QtGui, QtCore
-from PyQt5.QtWidgets import QCheckBox, QDialog, QApplication
+from PyQt5.QtWidgets import QCheckBox, QDialog, QApplication, QDateTimeEdit
 
 class SignIn(QDialog):
     def __init__(self):
@@ -209,8 +210,12 @@ class User(QDialog):
                 for row in range(len(tasks[username])):
                     task = QtWidgets.QTableWidgetItem(tasks[username][row]['task'])
                     address = QtWidgets.QTableWidgetItem(tasks[username][row]['address'])
-                    timeStart = QtWidgets.QTableWidgetItem(tasks[username][row]['time'])
-                    timeEnd = QtWidgets.QTableWidgetItem(tasks[username][row]['time'])
+                    timeStart = QDateTimeEdit(datetime.strptime(tasks[username][row]['timeStart'],'%d.%m.%Y - %H:%M' ))
+                    timeEnd = QDateTimeEdit(datetime.strptime(tasks[username][row]['timeEnd'],'%d.%m.%Y - %H:%M'))
+                    timeStart.setFrame(False)
+                    timeStart.setDisplayFormat('dd.MM.yyyy - hh:mm')
+                    timeEnd.setFrame(False)
+                    timeEnd.setDisplayFormat('dd.MM.yyyy - hh:mm')
                     chkBoxItem = QCheckBox('Done')
                     if not tasks[username][row]['done'] :
                         chkBoxItem.setCheckState(QtCore.Qt.Unchecked)
@@ -219,8 +224,8 @@ class User(QDialog):
                     self.listOfTask.insertRow(self.listOfTask.rowCount())
                     self.listOfTask.setItem(row, 0, task)
                     self.listOfTask.setItem(row, 1, address)
-                    self.listOfTask.setItem(row, 2, timeStart)
-                    self.listOfTask.setItem(row, 3, timeEnd)
+                    self.listOfTask.setCellWidget(row, 2, timeStart)
+                    self.listOfTask.setCellWidget(row, 3, timeEnd)
                     self.listOfTask.setCellWidget(row, 4, chkBoxItem)
 
     def saveAll(self):
@@ -230,13 +235,15 @@ class User(QDialog):
             taskfile.seek(0)
             taskfile.truncate()
             taskfile.close()
+            if self.uName in tasks.keys():
+                del tasks[self.uName]
             for row in range(self.listOfTask.rowCount()):
-                # tk=self.listOfTask.item(row,1).text()
-                tasks[self.uName][row]=dict()
+                # tasks[self.uName][row]=dict()
                 tasks[self.uName][row]['task']=self.listOfTask.item(row,0).text()
                 tasks[self.uName][row]['address']=self.listOfTask.item(row,1).text()
-                tasks[self.uName][row]['time']=self.listOfTask.item(row,2).text()
-                if self.listOfTask.cellWidget(row,3).isChecked():
+                tasks[self.uName][row]['timeStart']=self.listOfTask.cellWidget(row,2).text()
+                tasks[self.uName][row]['timeEnd']=self.listOfTask.cellWidget(row,3).text()
+                if self.listOfTask.cellWidget(row,4).isChecked():
                     tasks[self.uName][row]['done']= True
                 else:  tasks[self.uName][row]['done']= False
                 print(self.listOfTask.item(row,0).text())
@@ -250,28 +257,45 @@ class User(QDialog):
                 tasksDict[self.uName][row]=dict()
                 tasksDict[self.uName][row]['task']=self.listOfTask.item(row,0).text()
                 tasksDict[self.uName][row]['address']=self.listOfTask.item(row,1).text()
-                print(self.listOfTask.cellWidget(row,3).isChecked())
-                tasksDict[self.uName][row]['time']=self.listOfTask.item(row,2).text()
+                print(self.listOfTask.cellWidget(row,4).isChecked())
+                tasksDict[self.uName][row]['timeStart']=self.listOfTask.cellWidget(row,2).text()
+                tasksDict[self.uName][row]['timeEnd']=self.listOfTask.cellWidget(row,3).text()
                     
-                if self.listOfTask.cellWidget(row,3).isChecked():
+                if self.listOfTask.cellWidget(row,4).isChecked():
                     tasksDict[self.uName][row]['done']= True
                 else:  tasksDict[self.uName][row]['done']= False
                     
             fileTasks = open('data/task.dat', 'wb')
             pickle.dump(tasksDict, fileTasks)
             fileTasks.close()
-        
+
+    def checkTime(self, dct):
+        times = dict()
+        overlappingTime = list()
+
+        for key, value in dct.items():
+            start = datetime.strptime(key, 'dd.MM.yyyy - hh:mm')
+            end = datetime.strptime(value, 'dd.MM.yyyy - hh:mm')
+
+            times[start] = end
+
+
     def addTask(self):
         self.listOfTask.insertRow(self.listOfTask.rowCount())
         row = self.listOfTask.rowCount()-1
         chkBoxItem = QCheckBox('Done')
         chkBoxItem.setCheckState(QtCore.Qt.Unchecked)
-        self.listOfTask.setCellWidget(row, 3, chkBoxItem)
+        self.listOfTask.setCellWidget(row, 4, chkBoxItem)
 
-        dateTimeStart=QtWidgets.QTableWidgetItem(QtCore.QDateTime.currentDateTime().toString('dd.MM.yyyy - hh:mm'))
-        self.listOfTask.setItem(row, 2, dateTimeStart)
-        dateTimeEnd=QtWidgets.QTableWidgetItem(QtCore.QDateTime.currentDateTime().toString('dd.MM.yyyy - hh:mm'))
-        self.listOfTask.setItem(row, 3, dateTimeEnd)
+        dateTimeStart= QDateTimeEdit(QtCore.QDateTime.currentDateTime())
+        dateTimeStart.setFrame(False)
+        dateTimeStart.setDisplayFormat('dd.MM.yyyy - hh:mm')
+        self.listOfTask.setCellWidget(row, 2, dateTimeStart)
+
+        dateTimeEnd = QDateTimeEdit(QtCore.QDateTime.currentDateTime())
+        dateTimeEnd.setFrame(False)
+        dateTimeEnd.setDisplayFormat('dd.MM.yyyy - hh:mm')
+        self.listOfTask.setCellWidget(row, 3, dateTimeEnd)
 
     def deleteTask(self):
         if self.listOfTask.rowCount()>0:
@@ -318,17 +342,18 @@ class Admin(QDialog):
         self.setUpTable()
 
     def setUpTable(self):
-        fileUser = open ('data/user.dat', 'rb')
-        users = pickle.load(fileUser)
-        row = 0
-        for user in users.keys():
-            username = QtWidgets.QTableWidgetItem(user)
-            password = QtWidgets.QTableWidgetItem(users[user])
-            self.listOfUser.insertRow(self.listOfUser.rowCount())
-            self.listOfUser.setItem(row, 0, username)
-            self.listOfUser.setItem(row, 1, password)
-            row += 1
-        fileUser.close()
+        if os.path.getsize('data/user.dat') != 0:
+            fileUser = open ('data/user.dat', 'rb')
+            users = pickle.load(fileUser)
+            row = 0
+            for user in users.keys():
+                username = QtWidgets.QTableWidgetItem(user)
+                password = QtWidgets.QTableWidgetItem(users[user])
+                self.listOfUser.insertRow(self.listOfUser.rowCount())
+                self.listOfUser.setItem(row, 0, username)
+                self.listOfUser.setItem(row, 1, password)
+                row += 1
+            fileUser.close()
 
 
     def addUser(self):
