@@ -25,7 +25,7 @@ class Ui_userInterface(object):
         self.listOfTask.setStyleSheet("\n"
 "background-color: rgb(255, 255, 255);")
         self.listOfTask.setObjectName("listOfTask")
-        self.listOfTask.setColumnCount(4)
+        self.listOfTask.setColumnCount(5)
         self.listOfTask.setRowCount(0)
         item = QtWidgets.QTableWidgetItem()
         self.listOfTask.setHorizontalHeaderItem(0, item)
@@ -35,6 +35,8 @@ class Ui_userInterface(object):
         self.listOfTask.setHorizontalHeaderItem(2, item)
         item = QtWidgets.QTableWidgetItem()
         self.listOfTask.setHorizontalHeaderItem(3, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.listOfTask.setHorizontalHeaderItem(4, item)
         self.btnSignOut_user = QtWidgets.QPushButton(userInterface)
         self.btnSignOut_user.setGeometry(QtCore.QRect(1420, 20, 100, 40))
         self.btnSignOut_user.setStyleSheet("\n"
@@ -78,6 +80,8 @@ class Ui_userInterface(object):
         item = self.listOfTask.horizontalHeaderItem(2)
         item.setText(_translate("userInterface", "Time"))
         item = self.listOfTask.horizontalHeaderItem(3)
+        item.setText(_translate("userInterface", "End"))
+        item = self.listOfTask.horizontalHeaderItem(4)
         item.setText(_translate("userInterface", "Check"))
         self.btnSignOut_user.setText(_translate("userInterface", "Sign out"))
         self.toDoList.setText(_translate("userInterface", "<html><head/><body><p><span style=\" font-size:36pt;\">Todo list</span></p></body></html>"))

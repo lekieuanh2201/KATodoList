@@ -53,17 +53,17 @@ class User(QDialog):
             chkBoxItem = QtWidgets.QTableWidgetItem("Done")
             chkBoxItem.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
             chkBoxItem.setCheckState(QtCore.Qt.Unchecked)
-            self.listOfTask.setItem(row, 3, chkBoxItem)
+            self.listOfTask.setItem(row, 4, chkBoxItem)
 
             dateTimeStart= QDateTimeEdit(QtCore.QDateTime.currentDateTime())
             dateTimeStart.setFrame(False)
             dateTimeStart.setDisplayFormat('dd.MM.yyyy - hh:mm')
             self.listOfTask.setCellWidget(row, 2, dateTimeStart)
 
-            # dateTimeEnd = QDateTimeEdit(QtCore.QDateTime.currentDateTime())
-            # dateTimeEnd.setFrame(False)
-            # dateTimeEnd.setDisplayFormat('dd.MM.yyyy - hh:mm')
-            # self.listOfTask.setCellWidget(row, 2, dateTimeEnd)
+            dateTimeEnd = QDateTimeEdit(QtCore.QDateTime.currentDateTime())
+            dateTimeEnd.setFrame(False)
+            dateTimeEnd.setDisplayFormat('dd.MM.yyyy - hh:mm')
+            self.listOfTask.setCellWidget(row, 3, dateTimeEnd)
             
             
 

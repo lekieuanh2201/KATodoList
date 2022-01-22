@@ -77,15 +77,7 @@ class SignIn(QDialog):
                     msg.setWindowTitle("Warning")
                     msg.setWindowIcon(QtGui.QIcon('img/AppIcon.png'))
                     msg.exec_()
-                    # except EOFError:
-                    #     msg = QtWidgets.QMessageBox()
-                    #     msg.setIcon(QtWidgets.QMessageBox.Warning)
-                    #     msg.setText("Invalid account!")
-                    #     msg.setWindowTitle("Warning")
-                    #     msg.setWindowIcon(QtGui.QIcon('img/AppIcon.png'))
-                    #     msg.exec_()
-                    #     break
-                                          
+                                        
 class SignUp(QDialog):
     def __init__(self):
         super(SignUp, self).__init__()
@@ -217,7 +209,8 @@ class User(QDialog):
                 for row in range(len(tasks[username])):
                     task = QtWidgets.QTableWidgetItem(tasks[username][row]['task'])
                     address = QtWidgets.QTableWidgetItem(tasks[username][row]['address'])
-                    time = QtWidgets.QTableWidgetItem(tasks[username][row]['time'])
+                    timeStart = QtWidgets.QTableWidgetItem(tasks[username][row]['time'])
+                    timeEnd = QtWidgets.QTableWidgetItem(tasks[username][row]['time'])
                     chkBoxItem = QCheckBox('Done')
                     if not tasks[username][row]['done'] :
                         chkBoxItem.setCheckState(QtCore.Qt.Unchecked)
@@ -226,61 +219,48 @@ class User(QDialog):
                     self.listOfTask.insertRow(self.listOfTask.rowCount())
                     self.listOfTask.setItem(row, 0, task)
                     self.listOfTask.setItem(row, 1, address)
-                    self.listOfTask.setItem(row, 2, time)
-                    self.listOfTask.setCellWidget(row, 3, chkBoxItem)
+                    self.listOfTask.setItem(row, 2, timeStart)
+                    self.listOfTask.setItem(row, 3, timeEnd)
+                    self.listOfTask.setCellWidget(row, 4, chkBoxItem)
 
     def saveAll(self):
-        checkTime = True
-        listTime = list()
-        for row in range(self.listOfTask.rowCount()):
-            if self.listOfTask.item(row,2).text() in listTime:
-                checkTime = False
-                break
-            else:
-                listTime.append(self.listOfTask.item(row,2).text())
-        if(checkTime):
-            if os.path.getsize('data/task.dat') != 0:
-                taskfile = open('data/task.dat','rb')
-                tasks = pickle.load(taskfile)
-                taskfile.close()
-                for row in range(self.listOfTask.rowCount()):
-                    # tk=self.listOfTask.item(row,1).text()
-                    tasks[self.uName][row]=dict()
-                    tasks[self.uName][row]['task']=self.listOfTask.item(row,0).text()
-                    tasks[self.uName][row]['address']=self.listOfTask.item(row,1).text()
-                    tasks[self.uName][row]['time']=self.listOfTask.item(row,2).text()
-                    if self.listOfTask.cellWidget(row,3).isChecked():
-                        tasks[self.uName][row]['done']= True
-                    else:  tasks[self.uName][row]['done']= False
-                    print(self.listOfTask.item(row,0).text())
-                file = open('data/task.dat','wb')
-                pickle.dump(tasks, file)
-                file.close()
-            else:
-                tasksDict = dict()
-                tasksDict[self.uName]=dict()
-                for row in range(self.listOfTask.rowCount()):
-                    tasksDict[self.uName][row]=dict()
-                    tasksDict[self.uName][row]['task']=self.listOfTask.item(row,0).text()
-                    tasksDict[self.uName][row]['address']=self.listOfTask.item(row,1).text()
-                    print(self.listOfTask.cellWidget(row,3).isChecked())
-                    tasksDict[self.uName][row]['time']=self.listOfTask.item(row,2).text()
-                    
-                    if self.listOfTask.cellWidget(row,3).isChecked():
-                        tasksDict[self.uName][row]['done']= True
-                    else:  tasksDict[self.uName][row]['done']= False
-                    
-                fileTasks = open('data/task.dat', 'wb')
-                pickle.dump(tasksDict, fileTasks)
-                fileTasks.close()
+        if os.path.getsize('data/task.dat') != 0:
+            taskfile = open('data/task.dat','rb+')
+            tasks = pickle.load(taskfile)
+            taskfile.seek(0)
+            taskfile.truncate()
+            taskfile.close()
+            for row in range(self.listOfTask.rowCount()):
+                # tk=self.listOfTask.item(row,1).text()
+                tasks[self.uName][row]=dict()
+                tasks[self.uName][row]['task']=self.listOfTask.item(row,0).text()
+                tasks[self.uName][row]['address']=self.listOfTask.item(row,1).text()
+                tasks[self.uName][row]['time']=self.listOfTask.item(row,2).text()
+                if self.listOfTask.cellWidget(row,3).isChecked():
+                    tasks[self.uName][row]['done']= True
+                else:  tasks[self.uName][row]['done']= False
+                print(self.listOfTask.item(row,0).text())
+            file = open('data/task.dat','wb')
+            pickle.dump(tasks, file)
+            file.close()
         else:
-            msg = QtWidgets.QMessageBox()
-            msg.setIcon(QtWidgets.QMessageBox.Warning)
-            msg.setText("Overlapping time!")
-            msg.setWindowTitle("Warning")
-            msg.setWindowIcon(QtGui.QIcon('img/AppIcon.png'))
-            msg.exec_()
-
+            tasksDict = dict()
+            tasksDict[self.uName]=dict()
+            for row in range(self.listOfTask.rowCount()):
+                tasksDict[self.uName][row]=dict()
+                tasksDict[self.uName][row]['task']=self.listOfTask.item(row,0).text()
+                tasksDict[self.uName][row]['address']=self.listOfTask.item(row,1).text()
+                print(self.listOfTask.cellWidget(row,3).isChecked())
+                tasksDict[self.uName][row]['time']=self.listOfTask.item(row,2).text()
+                    
+                if self.listOfTask.cellWidget(row,3).isChecked():
+                    tasksDict[self.uName][row]['done']= True
+                else:  tasksDict[self.uName][row]['done']= False
+                    
+            fileTasks = open('data/task.dat', 'wb')
+            pickle.dump(tasksDict, fileTasks)
+            fileTasks.close()
+        
     def addTask(self):
         self.listOfTask.insertRow(self.listOfTask.rowCount())
         row = self.listOfTask.rowCount()-1
@@ -290,6 +270,8 @@ class User(QDialog):
 
         dateTimeStart=QtWidgets.QTableWidgetItem(QtCore.QDateTime.currentDateTime().toString('dd.MM.yyyy - hh:mm'))
         self.listOfTask.setItem(row, 2, dateTimeStart)
+        dateTimeEnd=QtWidgets.QTableWidgetItem(QtCore.QDateTime.currentDateTime().toString('dd.MM.yyyy - hh:mm'))
+        self.listOfTask.setItem(row, 3, dateTimeEnd)
 
     def deleteTask(self):
         if self.listOfTask.rowCount()>0:
