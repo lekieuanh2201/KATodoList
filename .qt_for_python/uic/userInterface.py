@@ -78,7 +78,7 @@ class Ui_userInterface(object):
         item = self.listOfTask.horizontalHeaderItem(1)
         item.setText(_translate("userInterface", "Address"))
         item = self.listOfTask.horizontalHeaderItem(2)
-        item.setText(_translate("userInterface", "Time"))
+        item.setText(_translate("userInterface", "Start"))
         item = self.listOfTask.horizontalHeaderItem(3)
         item.setText(_translate("userInterface", "End"))
         item = self.listOfTask.horizontalHeaderItem(4)

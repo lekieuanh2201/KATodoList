@@ -5,6 +5,7 @@ from PyQt5.uic import loadUi
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtWidgets import QCheckBox, QDialog, QApplication, QDateTimeEdit
 
+
 class SignIn(QDialog):
     def __init__(self):
         super(SignIn, self).__init__()
@@ -136,7 +137,7 @@ class SignUp(QDialog):
         else: 
             userdata = open('data/user.dat','rb+')
             users = pickle.load(userdata)
-            print(users)
+            # print(users)
           
             if userName in users.keys():
                 msg = QtWidgets.QMessageBox()
@@ -156,7 +157,7 @@ class SignUp(QDialog):
 
                 elif password == verifyPass:
                     users[userName]= password
-                    print(users)
+                    # print(users)
                     userdata.seek(0)
                     userdata.truncate()
                     pickle.dump(users, userdata)
@@ -191,10 +192,10 @@ class User(QDialog):
                                         "QPushButton::pressed" "{" "background-color: #CCE5FF; ""}" )
         self.btnDeleteTask.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
 
-        self.listOfTask.setColumnWidth(0, 550)
-        self.listOfTask.setColumnWidth(1, 350)
-        self.listOfTask.setColumnWidth(2, 220)
-        self.listOfTask.setColumnWidth(3, 220)
+        self.listOfTask.setColumnWidth(0, 520)
+        self.listOfTask.setColumnWidth(1, 300)
+        self.listOfTask.setColumnWidth(2, 200)
+        self.listOfTask.setColumnWidth(3, 200)
         self.btnAddTask.clicked.connect(self.addTask)
         self.btnDeleteTask.clicked.connect(self.deleteTask)
         self.btnSignOut_user.clicked.connect(self.gotoLogin)
@@ -229,16 +230,19 @@ class User(QDialog):
                     self.listOfTask.setCellWidget(row, 4, chkBoxItem)
 
     def saveAll(self):
+        times = list()
         if os.path.getsize('data/task.dat') != 0:
             taskfile = open('data/task.dat','rb+')
             tasks = pickle.load(taskfile)
-            taskfile.seek(0)
             taskfile.truncate()
             taskfile.close()
+            # print(self.listOfTask.rowCount())
             if self.uName in tasks.keys():
                 del tasks[self.uName]
+            tasks[self.uName] = dict()
             for row in range(self.listOfTask.rowCount()):
-                # tasks[self.uName][row]=dict()
+                tasks[self.uName][row]=dict()
+                # print(row)
                 tasks[self.uName][row]['task']=self.listOfTask.item(row,0).text()
                 tasks[self.uName][row]['address']=self.listOfTask.item(row,1).text()
                 tasks[self.uName][row]['timeStart']=self.listOfTask.cellWidget(row,2).text()
@@ -246,10 +250,20 @@ class User(QDialog):
                 if self.listOfTask.cellWidget(row,4).isChecked():
                     tasks[self.uName][row]['done']= True
                 else:  tasks[self.uName][row]['done']= False
-                print(self.listOfTask.item(row,0).text())
-            file = open('data/task.dat','wb')
-            pickle.dump(tasks, file)
-            file.close()
+                # print(self.listOfTask.item(row,0).text())
+                times.append((tasks[self.uName][row]['timeStart'], tasks[self.uName][row]['timeEnd']))
+            if self.checkTime(times):
+                file = open('data/task.dat','wb')
+                pickle.dump(tasks, file)
+                file.close()
+            else:
+                msg = QtWidgets.QMessageBox()
+                msg.setIcon(QtWidgets.QMessageBox.Warning)
+                msg.setText("Overlapping time!")
+                msg.setWindowTitle("Warning")
+                msg.setWindowIcon(QtGui.QIcon('img/AppIcon.png'))
+                msg.exec_()
+
         else:
             tasksDict = dict()
             tasksDict[self.uName]=dict()
@@ -257,32 +271,73 @@ class User(QDialog):
                 tasksDict[self.uName][row]=dict()
                 tasksDict[self.uName][row]['task']=self.listOfTask.item(row,0).text()
                 tasksDict[self.uName][row]['address']=self.listOfTask.item(row,1).text()
-                print(self.listOfTask.cellWidget(row,4).isChecked())
+                # print(self.listOfTask.cellWidget(row,4).isChecked())
                 tasksDict[self.uName][row]['timeStart']=self.listOfTask.cellWidget(row,2).text()
                 tasksDict[self.uName][row]['timeEnd']=self.listOfTask.cellWidget(row,3).text()
                     
                 if self.listOfTask.cellWidget(row,4).isChecked():
                     tasksDict[self.uName][row]['done']= True
                 else:  tasksDict[self.uName][row]['done']= False
-                    
-            fileTasks = open('data/task.dat', 'wb')
-            pickle.dump(tasksDict, fileTasks)
-            fileTasks.close()
+                times.append((tasksDict[self.uName][row]['timeStart'], tasksDict[self.uName][row]['timeEnd']))
+            if self.checkTime(times):
+                fileTasks = open('data/task.dat', 'wb')
+                pickle.dump(tasksDict, fileTasks)
+                fileTasks.close()
+            else:
+                msg = QtWidgets.QMessageBox()
+                msg.setIcon(QtWidgets.QMessageBox.Warning)
+                msg.setText("Overlapping time!")
+                msg.setWindowTitle("Warning")
+                msg.setWindowIcon(QtGui.QIcon('img/AppIcon.png'))
+                msg.exec_()
 
-    def checkTime(self, dct):
-        times = dict()
-        overlappingTime = list()
+    def checkTime(self, times):
+        timelist = list()
+        checktime = True
+        for start_end in times:
+            start = datetime.strptime(start_end[0], '%d.%m.%Y - %H:%M' )
+            end = datetime.strptime(start_end[1], '%d.%m.%Y - %H:%M' )
+            if end < start:
+                checktime = False
+                break
+            # print(len(timelist))
+            if timelist:
+                for item in timelist:
+                    if start == end:
+                        if start > item[0] and start <  item[1]:
+                            checktime = False
+                            break
+                    else:               
+                        if end > item[0] and end <item[1]:
+                            checktime = False
+                            break
+                        if start > item[0] and start < item[1]:
+                            checktime = False
+                            break
+                        if start < item[0] and end > item[1]:
+                            checktime = False
+                            break
+                        if item[0] == item[1]:
+                            if item[0] >start and item[0]<end:
+                                checktime = False
+                                break
+                        # print(checktime)
+                if checktime: 
+                    timelist.append((start, end))
+            if not timelist:
+                timelist.append((start, end))
+            if not checktime:
+                break
+        return checktime     
 
-        for key, value in dct.items():
-            start = datetime.strptime(key, 'dd.MM.yyyy - hh:mm')
-            end = datetime.strptime(value, 'dd.MM.yyyy - hh:mm')
-
-            times[start] = end
-
-
+                
     def addTask(self):
         self.listOfTask.insertRow(self.listOfTask.rowCount())
         row = self.listOfTask.rowCount()-1
+        emptyString1 = QtWidgets.QTableWidgetItem("Write your task here!")
+        emptyString2 = QtWidgets.QTableWidgetItem("Write address here!")
+        self.listOfTask.setItem(row, 0, emptyString1)
+        self.listOfTask.setItem(row, 1, emptyString2)
         chkBoxItem = QCheckBox('Done')
         chkBoxItem.setCheckState(QtCore.Qt.Unchecked)
         self.listOfTask.setCellWidget(row, 4, chkBoxItem)
@@ -363,6 +418,7 @@ class Admin(QDialog):
         if self.listOfUser.rowCount()>0:
             currentRow = self.listOfUser.currentRow()
             self.listOfUser.removeRow(currentRow)
+
 
     def saveAll(self):
         users = dict()
