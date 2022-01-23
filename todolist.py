@@ -31,7 +31,13 @@ class SignIn(QDialog):
     def login(self):
         username = self.useNameFill.text()
         password = self.passwordFillIn.text()
-
+        if username == "" or password == "":
+            msg = QtWidgets.QMessageBox()
+            msg.setIcon(QtWidgets.QMessageBox.Warning)
+            msg.setText("Missing required information!")
+            msg.setWindowTitle("Warning")
+            msg.setWindowIcon(QtGui.QIcon('img/AppIcon.png'))
+            msg.exec_()
         if username == "admin":
             if password == "admin123":
                 admin = Admin()
@@ -107,6 +113,13 @@ class SignUp(QDialog):
         userName = self.useNameFill.text()
         password = self.passwordFillUp.text()
         verifyPass = self.verifyPassword.text()
+        if userName == "" or password == "":
+            msg = QtWidgets.QMessageBox()
+            msg.setIcon(QtWidgets.QMessageBox.Warning)
+            msg.setText("Missing required information!")
+            msg.setWindowTitle("Warning")
+            msg.setWindowIcon(QtGui.QIcon('img/AppIcon.png'))
+            msg.exec_()
         if userName == 'admin':
             msg = QtWidgets.QMessageBox()
             msg.setIcon(QtWidgets.QMessageBox.Warning)
