@@ -38,7 +38,7 @@ class SignIn(QDialog):
             msg.setWindowTitle("Warning")
             msg.setWindowIcon(QtGui.QIcon('img/AppIcon.png'))
             msg.exec_()
-        if username == "admin":
+        elif username == "admin":
             if password == "admin123":
                 admin = Admin()
                 widget.addWidget(admin)
@@ -120,14 +120,14 @@ class SignUp(QDialog):
             msg.setWindowTitle("Warning")
             msg.setWindowIcon(QtGui.QIcon('img/AppIcon.png'))
             msg.exec_()
-        if userName == 'admin':
+        elif userName == 'admin':
             msg = QtWidgets.QMessageBox()
             msg.setIcon(QtWidgets.QMessageBox.Warning)
             msg.setText("Existed account!")
             msg.setWindowTitle("Warning")
             msg.setWindowIcon(QtGui.QIcon('img/AppIcon.png'))
             msg.exec_()
-        if os.path.getsize('data/user.dat') == 0:
+        elif os.path.getsize('data/user.dat') == 0:
             userdata = open('data/user.dat','wb')
             users = dict()
             if password != verifyPass:
@@ -421,7 +421,6 @@ class Admin(QDialog):
                 row += 1
             fileUser.close()
 
-
     def addUser(self):
         self.listOfUser.insertRow(self.listOfUser.rowCount())
 
@@ -430,16 +429,43 @@ class Admin(QDialog):
             currentRow = self.listOfUser.currentRow()
             self.listOfUser.removeRow(currentRow)
 
-
     def saveAll(self):
-        users = dict()
-        for row in range(self.listOfUser.rowCount()):
-            userName = self.listOfUser.item(row, 0).text()
-            password = self.listOfUser.item(row, 1).text()
-            users[userName]=password
-        fileUser = open('data/user.dat','wb')
-        pickle.dump(users,fileUser)
-        fileUser.close()
+        try:
+            users = dict()
+            user = list()
+            for row in range(self.listOfUser.rowCount()):
+                userName = self.listOfUser.item(row, 0).text()
+                password = self.listOfUser.item(row, 1).text()
+                if userName == "" or password == "":
+                    msg = QtWidgets.QMessageBox()
+                    msg.setIcon(QtWidgets.QMessageBox.Warning)
+                    msg.setText("Missing required information!")
+                    msg.setWindowTitle("Warning")
+                    msg.setWindowIcon(QtGui.QIcon('img/AppIcon.png'))
+                    msg.exec_()
+                    break
+                else:     
+                    user.append(userName)
+                    users[userName]=password
+            if len(user) != len(set(user)):
+                msg = QtWidgets.QMessageBox()
+                msg.setIcon(QtWidgets.QMessageBox.Warning)
+                msg.setText("Overlapping username!")
+                msg.setWindowTitle("Warning")
+                msg.setWindowIcon(QtGui.QIcon('img/AppIcon.png'))
+                msg.exec_()
+            else:
+                fileUser = open('data/user.dat','wb')
+                pickle.dump(users,fileUser)
+                fileUser.close()
+        except:
+            msg = QtWidgets.QMessageBox()
+            msg.setIcon(QtWidgets.QMessageBox.Warning)
+            msg.setText("Missing required information!")
+            msg.setWindowTitle("Warning")
+            msg.setWindowIcon(QtGui.QIcon('img/AppIcon.png'))
+            msg.exec_()            
+
 
     def logout(self):
         signIn = SignIn()
