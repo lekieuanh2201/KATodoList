@@ -342,8 +342,7 @@ class User(QDialog):
             if not checktime:
                 break
         return checktime     
-
-                
+           
     def addTask(self):
         self.listOfTask.insertRow(self.listOfTask.rowCount())
         row = self.listOfTask.rowCount()-1
@@ -369,7 +368,6 @@ class User(QDialog):
         if self.listOfTask.rowCount()>0:
             currentRow = self.listOfTask.currentRow()
             self.listOfTask.removeRow(currentRow)
-
     
     def gotoLogin(self):
         signIn = SignIn()
